@@ -35,10 +35,10 @@ func (m *Map) Get(key string) string {
 	if len(m.keys) == 0 {
 		return ""
 	}
-	hash := int(m.hash([]byte(key)))
+	// 取模最大范围
+	hash := int(m.hash([]byte(key)))%m.keys[len(m.keys)-1]
 	// Binary search for appropriate replica.
 	// 顺时针找到第一个匹配的虚拟节点的下标 idx，从 m.keys 中获取到对应的哈希值。
-	// idx == len(m.keys) 说明没有找到符合条件了 因为是环状的 所以都分配在了idx=0的节点
 	idx := sort.Search(len(m.keys), func(i int) bool {
 		return m.keys[i] >= hash
 	})
